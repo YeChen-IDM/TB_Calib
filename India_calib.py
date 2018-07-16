@@ -17,9 +17,9 @@ from tb.add_tb_drug_type import add_tb_drug_type
 from tb.add_tbhiv_outbreak import add_tbhiv_outbreak
 from tb.add_simplehivdiagnostic import add_simplehivdiagnostic
 
-# from GujCalibSite import GujCalibSite
-#from IndiaCalibSite import IndiaCalibSite
-from GujCalibSite_noage import GujCalibSite
+from GujCalibSite import GujCalibSite
+from IndiaCalibSite import IndiaCalibSite
+# from GujCalibSite_noage import GujCalibSite
 from calibtool.CalibManager import CalibManager
 from calibtool.Prior import MultiVariatePrior
 from calibtool.algorithms.IMIS import IMIS
@@ -28,14 +28,14 @@ from calibtool.plotters.SiteDataPlotter import SiteDataPlotter
 from random import randint
 
 sites = [GujCalibSite()]
-
+# sites = [IndiaCalibSite()]
 
 
 
 prior = MultiVariatePrior.by_range(
     Base_Infectivity=('linear', 0.01, 0.0329),
-    # Post_Infection_Acquisition_Multiplier=('linear', 0, 1.0),
     Post_Infection_Acquisition_Multiplier=('linear', 0, 1.0),
+    #Immunity_Acquisition_Factor=('linear', 0, 1.0),
     #Seek_Time_Slow= ('linear',low_seek_time_min, low_seek_time_max),
     #Seek_Time_Fast= ('linear', high_seek_time_min, high_seek_time_max)
     #TB_Active_Presymptomatic_Infectivity_Multiplier= ('linear',1e-9, 0.3),
@@ -131,9 +131,9 @@ cb.set_param('TB_Presymptomatic_Rate', 1/(30*6))
 
 # set underlying parameters
 cb.set_param('Listed_Events', ['Blackout', 'TBTestPreDOTSLow','TBTestPreDOTSHigh','TBDS_Positive',
-                               'TBTestDOTSHigh', 'TBTestDOTSLow'],)
+                               'TBTestDOTSHigh', 'TBTestDOTSLow', 'Active_Smear_Neg'])
 cb.set_param('Simulation_Duration', burn_initial + burn_predots + To_end_from_DOTS)
-cb.set_param('Base_Population_Scale_Factor', 200)
+cb.set_param('Base_Population_Scale_Factor', 20000)
 #cb.set_param('Base_Infectivity', 0.0219)  # set as calibration parameter
 cb.set_param('Demographics_Filenames', ['Base_Demog_India.json', 'Base_Overlay_India.json'])
 #cb.set_param('x_Other_Mortality', 0)
@@ -147,7 +147,6 @@ cb.set_param('x_Birth', 1.0)
 add_tbhiv_outbreak(cb, 0.02, 'TB')
 
 # second burn in phase PREDOTS treatment and diagnostics
-
 
 
 add_DiagnosticTreatNeg(cb, ['TBTestDOTSHigh'], sens_smear_pos_pre_GH, sens_smear_neg_pre_GH, treatment_fraction=0.8,
@@ -186,6 +185,7 @@ add_tbhiv_treat(cb, 'DOTSMDR', ['TBMDRTestPositive'], start_day=dots_start,
 #maybe include ART dropout at a rate
 
 #add in appropriate DLLs
+# add_tb_report(cb, additional_events= ['Active_Smear_Neg'],stop_year= 2000, min_age_yrs=0, max_age_yrs= 200, type= 'Report_TBHIV_ByAge' )
 add_tb_report(cb, stop_year= 2000, min_age_yrs=0, max_age_yrs= 200, type= 'Report_TBHIV_ByAge' )
 #add_tb_drug_type(cb, 'PreDOTSHigh',180,0.5,0.03,0,0.10,0.02)
 #add_tb_drug_type(cb, 'PreDOTSLow',180,0.5,0.03,0,0.10,0.02)
@@ -206,9 +206,9 @@ cb.disable('Default_Reporting')
 cb.set_param('Run_Number', randint(0, 10) )
 
 
-next_point_kwargs = dict(initial_samples=10,
-                         samples_per_iteration=8,
-                         n_resamples=10)
+next_point_kwargs = dict(initial_samples=4,
+                         samples_per_iteration=3,
+                         n_resamples=4)
 
 
 calib_manager = CalibManager(name='Gujarat_short',

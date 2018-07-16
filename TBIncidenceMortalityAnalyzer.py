@@ -49,7 +49,7 @@ class TBIncidenceMortalityAnalyzer(BaseCalibrationAnalyzer):
             self.reference_variance_mortality = pd.Series(site.reference_data.get(mortality_variance_key)).apply(
                 lambda x: (1 / 1.96 * (x / 1e5)) ** 2)
 
-        self.reference_years_prev = site.reference_data['Year Prevalence']
+        self.reference_years = site.reference_data['Years']
 
     def filter(self, sim_metadata):
         '''
@@ -64,7 +64,7 @@ class TBIncidenceMortalityAnalyzer(BaseCalibrationAnalyzer):
         '''
         Extract data from output data
         '''
-        data_yrs = self.site.reference_data['Year Prevalence']
+        data_yrs = self.site.reference_data['Years']
         # data = pd.DataFrame.from_dict(parser.raw_data[self.filenames[0]])
         data = parser.raw_data[self.filenames[0]].copy()
         a = data['Year']

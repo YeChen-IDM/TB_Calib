@@ -10,7 +10,7 @@ from calibtool.analyzers.ChannelBySeasonAgeDensityCohortAnalyzer import ChannelB
 from calibtool.analyzers.Helpers import season_channel_age_density_json_to_pandas,\
     season_channel_age_density_csv_to_pandas
 # from TBPrev_IncidenceMortalityAnalyzer import TBPrev_IncidenceMortalityAnalyzer
-# from TBIncidenceMortalityAnalyzer import TBIncidenceMortalityAnalyzer
+from TBIncidenceMortalityAnalyzer import TBIncidenceMortalityAnalyzer
 from TBIncidencePrevalenceAnalyzer import TBIncidencePrevalenceAnalyzer
 
 #from tb_csv_timeseries import TBTimeseriesAnalyzer
